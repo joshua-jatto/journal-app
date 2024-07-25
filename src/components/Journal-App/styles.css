@@ -77,12 +77,13 @@ input{
     margin: 2rem auto;
     display: flex;
     padding: 8px;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     
 }
 
-li{
+.journals>li{
+    width: 80%;
     list-style: none;
 }
 
@@ -98,6 +99,7 @@ li{
     border-radius: 8px;
     background-color: rgba(179, 179, 179, 0.144);
     cursor: pointer;
+    
 }
 .journal-item-options{
     display: flex;
@@ -135,9 +137,12 @@ li{
     justify-content: space-between;
     align-items: center;
     padding: 10px;
+    width: 100%;
+    align-items: center;
 }
 
 .list-header > select{
     width: 120px;
-    margin-left: 90%;
+    margin-right: 2rem;
+    
 }

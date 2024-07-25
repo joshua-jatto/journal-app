@@ -1,13 +1,49 @@
 import { useState, useEffect } from 'react'
+import { initDB, getAllItems, addItem, updateItem, deleteItem } from '../indexedDb/indexedDB';
 import './styles.css'
 
 export default function JournalApp() {
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
+    const [category, setCategory] = useState(null);
 
-    const [title, setTitle] = useState('')
-    const [content, setContent] = useState('')
-    const [category, setCategory] = useState(null)
+    const [items, setItems] = useState([]); //
     const [journals, setJournals] = useState([]);
     const [currentDateTime, setCurrentDateTime] = useState('');
+
+    const [db, setDb] = useState(null);
+
+    // ...item refer to data interacting with database
+    useEffect(() => {
+        const init = async () => {
+            const db = await initDB();
+            setDb(db);
+            const storedItems = await getAllItems(db);
+            setItems(storedItems);
+        };
+
+        init(); //initialize db for sync
+        setJournals(items); //sets initial items to journals with items from db via getAllItems
+    }, []);
+
+    const handleAddItem = async (item) => {
+        await addItem(db, item);
+        setItems((prevItems) => [...prevItems, item]);
+    };
+
+    // const handleUpdateItem = async (updatedItem) => {
+    //   await updateItem(db, updatedItem);
+    //   setItems((prevItems) =>
+    //     prevItems.map((item) => (item.id === updatedItem.id ? updatedItem : item))
+    //   );
+    //   console.log(updateItem)
+    // };
+
+    const handleDeleteItem = async (id) => {
+        await deleteItem(db, id);
+        setItems((prevItems) => prevItems.filter((item) => item.id !== id));
+        console.log('deleted item at', id)
+    };
 
 
     //handle Add new Journal entry()
@@ -16,11 +52,11 @@ export default function JournalApp() {
         if (!title.trim() || !content.trim()) {
             alert('Please enter a title and content.');
             return;
-        }
+        };
 
         setJournals(currentJournals => {
-            // console.log(currentJournals)
-            return [
+
+            const newItem = [
                 ...currentJournals, {
                     id: crypto.randomUUID(),
                     title,
@@ -28,32 +64,58 @@ export default function JournalApp() {
                     category,
                     currentDateTime
                 },
-            ]
-        })
+            ];
 
-    }
+            //verbose fix this!
+            handleAddItem({
+                id: crypto.randomUUID(),
+                title,
+                content,
+                category,
+                currentDateTime
+            })
+            return newItem
 
-    //function to delete journal enteries
-    function handleEntryDel(id) {
+        }),
+            setTitle('')
+        setContent('')
+    };
+
+    function handleDelEntry(id) {   // delete journal enteries in ui
         setJournals(currentJournals => {
             return currentJournals.filter(item => item.id !== id)
         })
+        handleDeleteItem(id) // delete journal enteries in db
     }
 
-
+    // #todo
     //function to filter journal entries based on selected categories
-    function handleSort(e) {
-        const category = e.target.value
-        setJournals(currentJournals => {
-            return currentJournals.reduce(item => item.category !== category)
-        })
-    }
+    // function handleSort(e) {
+    //     const category = e.target.value
+    //     setJournals(currentJournals => {
+    //         return currentJournals.reduce(item => item.category !== category)
+    //     })
+    // }
 
-    //get current date and time on compnent mount
+    //function to repopulate journal entry fields and edit items
+    function handleEditItem(getCurrentId) {
+        let cpyJournal = [...journals]
+        cpyJournal.map(item => {
+            if (item.id === getCurrentId) {
+                setTitle(item.title)
+                setContent(item.content)
+                setCategory(item.category)
+            }
+            return cpyJournal
+        });
+
+    };
+
+    //assigns current locale time to each journal entry
     useEffect(() => {
         const now = new Date();
         setCurrentDateTime(now.toLocaleString());
-    }, []);
+    }, [handleAddItem]);
 
 
     return <div className="journal-wrapper">
@@ -71,7 +133,7 @@ export default function JournalApp() {
 
             />
             <input
-                type="textarea"
+                type="textfield"
                 name='content'
                 id='textarea'
                 placeholder='Enter todays Jourey...'
@@ -97,7 +159,7 @@ export default function JournalApp() {
         </div>
 
 
-        {journals && journals.length < 2 ? <h1>My Journal_</h1> : <div className="list-header"><h1>My Journals_</h1>
+        {journals && journals.length < 2 ? <h1>My Journal_</h1> : <div className="list-header"><h1>My Journals_<span style={{ color: 'green' }}>{journals && journals.length}</span></h1>
             <select onChange={(e) => handleSort(e)}>
                 <option value="default">sort by category</option>
                 <option value="personal">Personal</option>
@@ -121,8 +183,8 @@ export default function JournalApp() {
                             </span>
 
                             <span className='journal-item-options'>
-                                <button onClick={() => handleEntryDel(item.id)}>Delete</button>
-                                <button>Edit</button>
+                                <button onClick={() => handleDelEntry(item.id)}>Delete</button>
+                                <button onClick={() => handleEditItem(item.id)}>Edit</button>
                             </span>
                         </span>
 
@@ -142,4 +204,4 @@ export default function JournalApp() {
 
 }
 
-// todos  unable to implement edit item functionality
+// todos  unable to implement sort item based on category functionality
