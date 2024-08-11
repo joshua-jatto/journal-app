@@ -10,7 +10,7 @@ body{
     font-family: Arial, Helvetica, sans-serif;
 }
 
-.journal-wrapper, .login-wrapper{
+.journal-wrapper,  .-wrapper{
     width: 650px;
     height: auto;
     margin: 2rem auto;
@@ -55,6 +55,18 @@ input, select, .form-btn{
     cursor: pointer;
 }
 
+.form-btn{
+    border: 1px solid gray;
+    border-top: none;
+    border-radius: 9px;
+    margin: .5rem auto;
+    
+}
+.form-btn:hover{
+    border-top: 1px solid gray;
+    font-weight: bolder;
+    transition: .3s all ease-in-out;
+}
 
 input{
     margin-bottom: 1rem;
@@ -124,13 +136,6 @@ input{
     color: blue;
 }
 
-/* .empty{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    margin: 2rem auto;
-} */
 
 .list-header{
     display: flex;
@@ -145,4 +150,5 @@ input{
     width: 120px;
     margin-right: 2rem;
     
-}
+};
+
