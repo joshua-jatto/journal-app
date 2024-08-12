@@ -19,7 +19,7 @@ export default function JournalApp() {
   const [items, setItems] = useState([]);
   const [journals, setJournals] = useState([]);
   const [currentDateTime, setCurrentDateTime] = useState("");
-  const {displayName} = useAuth()
+  const {userName, currentUser} = useAuth()
 
   const [db, setDb] = useState(null);
 
@@ -38,7 +38,6 @@ export default function JournalApp() {
   const handleAddItem = async (item) => {
     await addItem(db, item);
     setItems((prevItems) => [...prevItems, item]);
-    // console.log('added item: ',item.id)
   };
 
   // const handleUpdateItem = async (updatedItem) => {
@@ -110,9 +109,10 @@ export default function JournalApp() {
 
   return (
     <div className="journal-wrapper">
-      <Navbar dispName={displayName}/>
+      <Navbar displayName={userName}/>
       <div>
-        <h3>Hello👋{displayName},begin new journey</h3>
+        <h4>Hello👋{currentUser?.displayName}...begin new journey</h4>
+        {/* {console.log(displayName)} */}
       </div>
 
       <div className="form">

@@ -9,7 +9,8 @@ export default function SignUpForm() {
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { signup,displayName, setDisplayName } = useAuth();
+  const { signup, userName, setUserName,setUserCredential, currentUser, updateProfile, userCredential} =
+    useAuth();
 
   async function handleSignUp(e) {
     e.preventDefault();
@@ -22,10 +23,22 @@ export default function SignUpForm() {
     try {
       setLoading(true);
       await signup(userEmail, userPassword);
+      // setUserCredential(userCredential)
+      console.log('tis', userCredential.user)
+
+      // Update user profile with display name
+      // await userCredential.user.updateProfile({ userName });//
+      // await updateProfile(currentUser.user, {
+      //   displayName: userName,
+      // });
       console.log("Signing up: ", userEmail);
       setLoading(false);
       navigate("/login");
-      console.log("Signing up: SUCESSFUL, proceed to Login ", userEmail);
+      console.log(
+        "Signing up: SUCESSFUL, proceed to Login ",
+        userEmail,
+        userName
+      );
     } catch (error) {
       console.error("error signing in FAILED!:", error.message);
       setLoading(false);
@@ -55,8 +68,8 @@ export default function SignUpForm() {
           type="text"
           name="name"
           placeholder="Your name"
-          value={displayName}
-          onChange={(e) => setDisplayName(e.target.value)}
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
           required
         />
         <input

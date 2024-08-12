@@ -7,16 +7,17 @@ import {
   sendPasswordResetEmail,
   updateEmail,
   updatePassword,
+  updateProfile,
 } from "firebase/auth";
 
-import { auth } from "../../utilities/firebase/firebase";
+import { auth } from "../../utilities/firebase/firebase"; //import auth instance from /firebase dep
 
 const AuthContext = createContext();
 
 function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
-  const [displayName, setDisplayName] = useState("");
-
+  const [userName, setUserName] = useState("");
+  const [userCredential, setUserCredential] = useState({});
 
   const [loading, setLoading] = useState(true);
 
@@ -30,19 +31,19 @@ function AuthProvider({ children }) {
     return unsubscribe;
   }, []);
 
-  function signup(email, password) {
-    const userCredential = createUserWithEmailAndPassword(
+  async function signup(email, password) {
+    const userCred = await createUserWithEmailAndPassword(
       auth,
       email,
       password
     );
-    return userCredential;
+      console.log('user cred',userCred.user);
+    setUserCredential(userCred);
   }
+  console.log('usercredential',userCredential)
 
   function login(email, password) {
-    const logginUser = signInWithEmailAndPassword(auth, email, password);
-    console.log("logging in Sucessful at: ", logginUser);
-    return logginUser;
+    return signInWithEmailAndPassword(auth, email, password);
   }
 
   function logout() {
@@ -70,8 +71,11 @@ function AuthProvider({ children }) {
     resetPassword,
     updateProfileEmail,
     updateProfilePassword,
-    displayName, setDisplayName
-    
+    userName,
+    setUserName,
+    updateProfile,
+    userCredential,
+    setUserCredential,
   };
   return (
     <AuthContext.Provider value={value}>

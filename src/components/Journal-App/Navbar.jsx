@@ -10,11 +10,13 @@ export default function Navbar({ displayName }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
+        borderBottom:'2px solid gray',
+        marginBottom:'2em'
       }}
     >
       <header>
-        <Link to={"/journalApp"}>
-          {" "}
+        <Link to={"/journalApp"}  style={{textDecoration:'none'}}>
+          
           <h2> mJ </h2>
         </Link>
       </header>
@@ -30,7 +32,7 @@ export default function Navbar({ displayName }) {
             borderRadius: "15px",
           }}
         >
-          <Link to={"/dashboard"}>
+          <Link to={"/dashboard"} style={{textDecoration:'none'}}>
             <div
               style={{
                 width: "100%",
@@ -38,10 +40,10 @@ export default function Navbar({ displayName }) {
                 margin: "8px auto",
                 textAlign: "center",
                 fontSize: "1.8rem",
+                
               }}
-            >
-              {/* {displayName[0]} */}
-              mj
+            > 
+              {displayName[0]}
             </div>
           </Link>
         </div>

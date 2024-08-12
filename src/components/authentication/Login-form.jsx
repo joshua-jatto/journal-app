@@ -1,29 +1,36 @@
 import { useState } from "react";
-import { Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/auth-context";
 
 export default function LogInForm() {
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
-  const { login } = useAuth();
+  const { login} = useAuth();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
 
   async function handleLogIn(e) {
     e.preventDefault();
     console.log(userEmail, userPassword);
 
     try {
-        setErrorMsg('')
+      setErrorMsg("");
       setLoading(true);
       await login(userEmail, userPassword);
-      navigate('/journalApp')
+      // Update user profile if displayName needs to be set or changed
+      // if (!currentUser.displayName || currentUser.displayName !== displayName) {
+      //   await updateProfile(currentUser, {
+      //     displayName: displayName,
+      //   });
+      // }
+      console.log("logging in Sucessful at: ");
+
+      navigate("/journalApp");
       console.log("Logged in: ", userEmail);
       setLoading(false);
     } catch (error) {
-      console.error("Logging in FAILED!:", error.msg);
+      console.log(error.message);
       setLoading(false);
       setErrorMsg(error.message);
     }
@@ -67,29 +74,25 @@ export default function LogInForm() {
 
         <div>
           <button disabled={loading} onClick={handleLogIn} className="form-btn">
-            {loading? 'logging in...pls wait':'Log in'}
+            {loading ? "logging in...pls wait" : "Log in"}
           </button>
         </div>
         <br />
         <div>
-        <br />
-        <div>
-          <p>
-            Need an Account? <Link to="/signup">sign up</Link>
-          </p>
-        </div>
-        <br />
-        <div>
-          <p>
-            Forgot password? <Link to="/forgot-password">Reset password</Link>
-          </p>
-        </div>
-       
-
-       
+          <br />
+          <div>
+            <p>
+              Need an Account? <Link to="/signup">sign up</Link>
+            </p>
+          </div>
+          <br />
+          <div>
+            <p>
+              Forgot password? <Link to="/forgot-password">Reset password</Link>
+            </p>
+          </div>
         </div>
       </form>
     </div>
   );
 }
-
