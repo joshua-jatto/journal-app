@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function Navbar({ displayName }) {
+export default function Navbar() {
   return (
     <nav
       style={{
@@ -43,7 +43,7 @@ export default function Navbar({ displayName }) {
                 
               }}
             > 
-              {displayName[0]}
+              {/* {displayName[0]} */}
             </div>
           </Link>
         </div>
