@@ -23,17 +23,14 @@ export default function SignUpForm() {
     try {
       setLoading(true);
       await signup(userEmail, userPassword);
-      // setUserCredential(userCredential)
-      console.log('tis', userCredential.user)
 
       // Update user profile with display name
-      // await userCredential.user.updateProfile({ userName });//
-      // await updateProfile(currentUser.user, {
-      //   displayName: userName,
-      // });
+      await updateProfile(currentUser.displayName, {
+        displayName: userName,
+      });
       console.log("Signing up: ", userEmail);
       setLoading(false);
-      navigate("/login");
+      navigate("/");
       console.log(
         "Signing up: SUCESSFUL, proceed to Login ",
         userEmail,
@@ -109,7 +106,7 @@ export default function SignUpForm() {
         </div>
         <div>
           <p>
-            Already have an Account? <Link to="/login">Log in</Link>
+            Already have an Account? <Link to="/">Log in</Link>
           </p>
         </div>
       </form>

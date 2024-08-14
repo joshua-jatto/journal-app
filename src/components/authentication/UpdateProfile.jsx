@@ -101,7 +101,7 @@ export default function UpdateProfile() {
         </div>
         <div>
           <p>
-            <Link to="/login">Cancel</Link>
+            <Link to="/">Cancel</Link>
           </p>
         </div>
       </form>

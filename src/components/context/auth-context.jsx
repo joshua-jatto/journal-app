@@ -15,9 +15,9 @@ import { auth } from "../../utilities/firebase/firebase"; //import auth instance
 const AuthContext = createContext();
 
 function AuthProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState();
+  const [currentUser, setCurrentUser] = useState(null);
   const [userName, setUserName] = useState("");
-  const [userCredential, setUserCredential] = useState({});
+  const [userCredential, setUserCredential] = useState();
 
   const [loading, setLoading] = useState(true);
 
@@ -25,7 +25,7 @@ function AuthProvider({ children }) {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
       setLoading(false);
-      console.log("UsER Authtenticated as: ", user);
+      console.log("UsER Authtenticated as: ", user.displayName);
     });
 
     return unsubscribe;
@@ -40,7 +40,6 @@ function AuthProvider({ children }) {
       console.log('user cred',userCred.user);
     setUserCredential(userCred);
   }
-  console.log('usercredential',userCredential)
 
   function login(email, password) {
     return signInWithEmailAndPassword(auth, email, password);

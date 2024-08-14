@@ -71,7 +71,7 @@ export default function ForgotPassword() {
         <div>
         <br />
         <div>
-          <p><Link to="/login">Log in</Link></p>
+          <p><Link to="/">Log in</Link></p>
         </div>
         
         

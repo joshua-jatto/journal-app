@@ -24,7 +24,7 @@ function App() {
           
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/signup" element={<SignUpForm />} />
-            <Route path="/login" element={<LoginForm />} />
+            <Route exact path="/" element={<LoginForm />} />
             <Route path="/update-profile" element={<UpdateProfile />} />
           </Routes>
           {/* <SignUpForm /> */}

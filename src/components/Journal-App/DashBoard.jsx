@@ -13,7 +13,7 @@ export default function DashBoard() {
     setErrorMsg("");
     try {
       await logout();
-      navigate("/login");
+      navigate("/");
     } catch {
       setErrorMsg("Failed to Log  out");
     }
