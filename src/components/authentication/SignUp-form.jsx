@@ -12,7 +12,7 @@ export default function SignUpForm() {
   const { signup, userName, setUserName,setUserCredential, currentUser, updateProfile, userCredential} =
     useAuth();
 
-  async function handleSignUp(e) {
+   function handleSignUp(e) {
     e.preventDefault();
     console.log(userEmail, userPassword, userConfirmPassword);
     if (userPassword !== userConfirmPassword) {
@@ -22,25 +22,31 @@ export default function SignUpForm() {
 
     try {
       setLoading(true);
-      await signup(userEmail, userPassword);
+
+       signup(userEmail, userPassword, userName);
 
       // Update user profile with display name
-      await updateProfile(currentUser.displayName, {
-        displayName: userName,
-      });
-      console.log("Signing up: ", userEmail);
+      // console.log(user, 'userCredential.user')
+      // await updateProfile(userCredential.user, {
+
+      //   displayName: userName,
+      // });
+
+      // console.log("Signing up: ", userEmail);
       setLoading(false);
       navigate("/");
-      console.log(
-        "Signing up: SUCESSFUL, proceed to Login ",
-        userEmail,
-        userName
-      );
+      // console.log(
+      //   "Signing up: SUCESSFUL, proceed to Login ",
+      //   userEmail,
+      //   userName
+      // );
     } catch (error) {
       console.error("error signing in FAILED!:", error.message);
       setLoading(false);
     }
   }
+
+
 
   return (
     <div className="-wrapper">
@@ -113,5 +119,4 @@ export default function SignUpForm() {
     </div>
   );
 
-  // todo yet to implement routes and auth
 }

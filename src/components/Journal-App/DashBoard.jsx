@@ -5,8 +5,7 @@ import Navbar from "./Navbar";
 
 export default function DashBoard() {
   const [errorMsg, setErrorMsg] = useState("");
-  const { currentUser } = useAuth();
-  const { logout,displayName } = useAuth();
+  const { logout, currentUser } = useAuth();
   const navigate = useNavigate();
 
   async function handleLogOut() {
@@ -21,7 +20,7 @@ export default function DashBoard() {
   }
   return (
     <div className="-wrapper">
-      <Navbar displayName={displayName}/>
+      <Navbar displayName={currentUser.displayName}/>
       <header>
         <h2>Profile</h2>
       </header>
@@ -39,7 +38,7 @@ export default function DashBoard() {
       )}
 
       <div style={{ margin: "1.5rem auto" }}>
-       <h3>Display name: {displayName}</h3> <br />
+       <h3>Display name: {currentUser.displayName}</h3> <br />
        <h3>Email: {currentUser.email}</h3>
         
         <hr />

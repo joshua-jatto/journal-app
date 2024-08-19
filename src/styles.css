@@ -54,6 +54,16 @@ input, select, .form-btn{
     font-size: 1.5em;
     cursor: pointer;
 }
+textarea{
+    width: 450px;
+    border: none;
+    margin-bottom: .5rem;
+    padding: 4px 10px;
+    background-color: rgba(179, 179, 179, 0.144);
+    font-size: 1.5em;
+    cursor: pointer;
+    height: 7rem;
+}
 
 .form-btn{
     border: 1px solid gray;

@@ -2,12 +2,13 @@ import { useState, useEffect } from "react";
 import {
   initDB,
   getAllItems,
-  addItem, 
+  addItem,
   updateItem,
   deleteItem,
 } from "../../utilities/indexedDb/indexedDB";
 import Navbar from "./Navbar";
 import { useAuth } from "../context/auth-context";
+import Item from "./item";
 
 //NOTE: ...item refer to data interacting with database
 export default function JournalApp() {
@@ -17,23 +18,31 @@ export default function JournalApp() {
   const [id, setId] = useState(crypto.randomUUID());
 
   const [items, setItems] = useState([]);
-  const [journals, setJournals] = useState([]);
+  const [journals, setJournals] = useState();
   const [currentDateTime, setCurrentDateTime] = useState("");
-  const {userName, currentUser} = useAuth()
+  const {currentUser} = useAuth();
 
-  const [db, setDb] = useState(null);
+  const [db, setDb] = useState();
 
   useEffect(() => {
     const init = async () => {
-      const db = await initDB();
-      setDb(db);
-      const storedItems = await getAllItems(db);
+      const data = await initDB();
+      setDb(data);
+      const storedItems = await getAllItems(data);
       setItems(storedItems);
+      setJournals(items);
     };
 
     init(); //initialize db for sync
-    setJournals(items); //sets initial items to journals with items from db via getAllItems
   }, []);
+
+  const newItem = {
+    id,
+    title,
+    content,
+    category,
+    currentDateTime,
+  };
 
   const handleAddItem = async (item) => {
     await addItem(db, item);
@@ -52,14 +61,6 @@ export default function JournalApp() {
     await deleteItem(db, id);
     setItems((prevItems) => prevItems.filter((item) => item.id !== id));
     console.log("deleted item at", id);
-  };
-
-  const newItem = {
-    id,
-    title,
-    content,
-    category,
-    currentDateTime,
   };
 
   //handle Add new Journal entry()
@@ -109,25 +110,23 @@ export default function JournalApp() {
 
   return (
     <div className="journal-wrapper">
-      <Navbar displayName={userName}/>
+      <Navbar displayName={currentUser?.displayName} />
       <div>
-        <h4>Hello👋{currentUser?.displayName}...begin new journey</h4>
-        {/* {console.log(displayName)} */}
+        <h4>Hello👋 {currentUser?.displayName}... Enter new journey</h4>
       </div>
 
       <div className="form">
         <input
           type="text"
           name="title"
-          placeholder="New Jourey title"
+          placeholder="New jourey title"
           onChange={(e) => setTitle(e.target.value)}
           value={title}
         />
-        <input
-          type="textfield"
+        <textarea
           name="content"
           id="textarea"
-          placeholder="Enter todays Jourey..."
+          placeholder="Enter today's Jourey..."
           onChange={(e) => setContent(e.target.value)}
           value={content}
         />
@@ -148,18 +147,15 @@ export default function JournalApp() {
       </div>
 
       {journals && journals.length < 2 ? (
-        <h3>My Journal_</h3>
+        <h3>My Journal</h3>
       ) : (
         <div className="list-header">
-
-         <h3>MyJournal myJourney
-         <span style={{ color: "green" }}>
+          <h4>
+          📝 Entries: 
+            <span style={{ color: "green" }}>
               {journals && journals.length}
-              📝
             </span>
-         </h3>
-            
-           
+          </h4>
           <select onChange={(e) => handleSort(e)}>
             <option value="default">sort by category</option>
             <option value="personal">Personal</option>
@@ -171,30 +167,14 @@ export default function JournalApp() {
 
       <ul className="journals">
         {journals && journals.length > 0 ? (
-          journals.map((item) => {
-            return (
-              <li key={item.id}>
-                <span className="journal-item">
-                  <span>
-                    <h4><strong>Title:</strong>{item.title}</h4>
-                    <h5><strong>Category:</strong>{item.category}</h5>
-                    <p><strong>Content:</strong>{item.content}</p>
-                    <p><strong>Date:</strong>{item.currentDateTime}</p>
-                    {/* <p>Id:{item.id}</p> */}
-                  </span>
-
-                  <span className="journal-item-options">
-                    <button onClick={() => handleDelEntry(item.id)}>
-                      Delete
-                    </button>
-                    <button onClick={() => handleEditItem(item.id)}>
-                      Edit
-                    </button>
-                  </span>
-                </span>
-              </li>
-            );
-          })
+          journals.map((item) => (
+            <Item
+              item={item}
+              handleDelEntry={handleDelEntry}
+              handleEditItem={handleEditItem}
+              key={item.id}
+            />
+          ))
         ) : (
           <span className="empty">
             <h4>Empty📪 Add a new journal entry</h4>

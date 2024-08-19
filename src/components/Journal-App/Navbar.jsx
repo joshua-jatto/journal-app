@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function Navbar() {
+export default function Navbar({displayName}) {
   return (
     <nav
       style={{
@@ -17,7 +17,7 @@ export default function Navbar() {
       <header>
         <Link to={"/journalApp"}  style={{textDecoration:'none'}}>
           
-          <h2> mJ </h2>
+          <h2>{`${displayName}'s Journal`} </h2>
         </Link>
       </header>
 
@@ -43,7 +43,7 @@ export default function Navbar() {
                 
               }}
             > 
-              {/* {displayName[0]} */}
+              {displayName[0]}
             </div>
           </Link>
         </div>
