@@ -27,7 +27,6 @@ function App() {
             <Route exact path="/" element={<LoginForm />} />
             <Route path="/update-profile" element={<UpdateProfile />} />
           </Routes>
-          {/* <SignUpForm /> */}
         </AuthProvider>
       </BrowserRouter>
     </>
