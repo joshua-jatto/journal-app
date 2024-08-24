@@ -13,7 +13,7 @@ import ForgotPassword from "./components/authentication/ForgotPassword";
 function App() {
   return (
     <>
-      <BrowserRouter>
+      <BrowserRouter basename="/Journal_App">
         <AuthProvider>
           <Routes>
           <Route element={<PrivateRoute />}>
